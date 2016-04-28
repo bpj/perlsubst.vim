@@ -25,7 +25,7 @@
 "
 "   OTOH {perl-regex} is not eval'ed. It is compiled once as
 "
-"       qr/(?$modifiers:$regex)/;
+"       qr/(?$flags:$regex)/;
 "
 "   Thus all [flags] which are valid in such an expression 
 "   for the version of perl which vim was compiled with are supported.
