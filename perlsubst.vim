@@ -94,9 +94,6 @@ fun! s:perl_subst(line1, line2, expr)
 
             # my $utf8 = is_utf8($line);
             $line = decode_utf8( $line );
-
-            # my $oldpos = pos($line) = 0;
-            # last RANGE;
             my $count = 0;
             my $changed = $line =~ s%$search%
                 my $replacement = eval $replace;
@@ -142,6 +139,7 @@ fun! s:perl_subst(line1, line2, expr)
             next RANGE unless $changed;
             $line = encode_utf8( $line );
             $curbuf->Set( $l, $line );
+            last RANGE if $last;
         }
     }
     else {
