@@ -114,7 +114,7 @@ fun! s:perl_subst(line1, line2, expr)
                     my ( $pre )    = $prematch =~ /(\X{0,$ctx})$/;
                     my ( $post )   = $postmatch =~ /^(\X{0,$ctx})/;
                     my $show_match = "$pre-->$match<--$post";
-                    our $msg
+                    my $msg
                       = qq{Replace "$show_match" with "$replacement" on line $l? (y/n/a/l/q) };
                     $msg =~ s/'/''/g;
                     my $res = VIM::Eval( encode_utf8( qq{input('$msg')} ) );
