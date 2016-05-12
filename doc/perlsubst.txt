@@ -2,7 +2,7 @@ perlsubst.vim
 
 
 
-*:PERLSUBST*
+*:Perlsubst*
 
 
 Do a perl substitution over a range, emulating Vim's /c flag.
