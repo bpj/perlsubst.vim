@@ -1,4 +1,4 @@
-perlsubst.vim
+perlsubst.txt
 
 
 
