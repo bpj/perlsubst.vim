@@ -17,18 +17,23 @@ WARNING: {perl-qq-string} is repeatedly eval'ed by perl as
     eval "qq/$string/";
 
 using the same delimiter as you used in the s/// expression.
-If that is concern don't use this script!
+If that is a concern don't use this script!
 
 Since {perl-qq-string} is eval'ed by perl you can interpolate perl's
 regex related global variables like $1, $+, %+, %-, and string modifiers
 like \u \l \U \L \Q \E inside it.
 
-OTOH {perl-regex} is not eval'ed. It is compiled once as
+Unlike before {perl-regex} is now eval'ed at the same time as it is compiled 
+once as
 
     qr/(?$flags:$regex)/;
 
-Thus all [flags] which are valid in such an expression 
-for the version of perl which vim was compiled with are supported.
+again using the same delimiter as in your original s/// expression.
+The eval is so that things like \N{CHARNAME} and \x{CODEPOINT} get
+evaluated correctly. Again if the perl eval is a concern don't use this script!
+
+All [flags] which are valid in such a qr// expression 
+for the version of perl which Vim was compiled with are supported.
 Additionally /g is fudged to work as you would expect.
 
 Confirmation: by default you are asked to confirm each substitution.

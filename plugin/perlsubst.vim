@@ -38,7 +38,7 @@ fun! s:perl_subst(line1, line2, expr)
         my ( $search, $replace, $mods )
           = $expr =~ /((?>(?:[^\Q$del\E]|\\\Q$del\E)+))/g;
         my $global = $mods =~ s/g//;
-        $search = qr/(?$mods:$search)/;
+        $search = eval "qr$del(?$mods:$search)$del";
         $replace = "qq$del$replace$del";
         my $ctx = $Perlsubst_context;
         $ctx = 10 unless defined $ctx;
