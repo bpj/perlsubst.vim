@@ -1,7 +1,7 @@
 " Name: perlsubst.vim
 " Description: Do a perl substitution over a range, emulating Vim's /c flag.
 "   This is mainly useful if you want to use perl's Unicode features.
-" Version: 0.002 2016-05-12
+" Version: 0.003 2016-05-12
 " Author: Benct Philip Jonsson <bpjonsson@gmail.com>
 " License: Same license as Vim
 "
