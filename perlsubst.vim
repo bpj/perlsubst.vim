@@ -77,6 +77,18 @@
 "   The latter because the Encode object is cached. It is not populated until
 "   you use the Perlsubst command the first time.
 
+if exists('g:loaded_perlsubst')
+  finish
+endif
+if !has('perl')
+    finish
+endif
+let g:loaded_perlsubst = 1
+
+
+let s:save_cpo = &cpo
+set cpo&vim
+
 fun! s:perl_subst(line1, line2, expr)
     perl <<
     use 5.010;
@@ -161,4 +173,11 @@ fun! s:perl_subst(line1, line2, expr)
 .
 endfun
 
-com! -range -nargs=1 Perlsubst call s:perl_subst(<line1>, <line2>, <f-args>)
+if !exists(':Perlsubst')
+    com -range -nargs=1 Perlsubst call s:perl_subst(<line1>, <line2>, <f-args>)
+endif
+
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
+
