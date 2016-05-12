@@ -1,7 +1,7 @@
 " Name: perlsubst.vim
 " Description: Do a perl substitution over a range, emulating Vim's /c flag.
 "   This is mainly useful if you want to use perl's Unicode features.
-" Version: 0.001 2016-04-28
+" Version: 0.002 2016-05-12
 " Author: Benct Philip Jonsson <bpjonsson@gmail.com>
 " License: Same license as Vim
 "
@@ -45,9 +45,9 @@
 "   context. If you think 10 characters of context before and after is too
 "   much/little you can set the context length to something else with
 "
-"       :perldo $main::Perlsubst_context = 15
+"       :perldo $main::Perlsubst_context = {integer}
 "
-"   where 15 of course should be replaced with your desired context length.
+"   where {integer} of course should be replaced with your desired context length.
 "
 "   You are now supposed to type one of the characters y/n/a/l/q AND HIT
 "   RETURN, since it is necessary to use input() here! They are made to behave 
@@ -64,17 +64,30 @@
 "
 "   Note that it is necessary to use the Encode module to decode/encode
 "   text going from/to vim. Otherwise lines already containing multibyte
-"   characters will be mangled.
+"   characters will be mangled. The default encoding is &encoding 
+"   (Note that 'utf-8' gives what Encode calls 'utf-8-strict' and
+"   not perl's laxer 'utf8' variant). If you get the wrong encoding
+"   (i.e. the Encode module doesn't know your encoding under the name which
+"   Vim uses) find out the name Encode uses and set the function to use that 
+"   encoding with
+"
+"       :perldo $main::Perlsubst_encoding = {encoding-name}
+"       :perldo $main::Perlsubst_encoder = undef
+"
+"   The latter because the Encode object is cached. It is not populated until
+"   you use the Perlsubst command the first time.
 
 fun! s:perl_subst(line1, line2, expr)
     perl <<
     use 5.010;
     use utf8;
-    use Encode qw[ decode_utf8 encode_utf8 ];
+    use Encode qw[ find_encoding ];
     my $line1 = VIM::Eval( 'a:line1' );
     my $line2 = VIM::Eval( 'a:line2' );
     my $expr  = VIM::Eval( 'a:expr' );
-    $expr = decode_utf8( $expr );
+    $Perlsubst_encoder ||= find_encoding(
+        $Perlsubst_encoding || Vim::Eval('&encoding') );
+    $expr = $Perlsubst_encoder->decode( $expr );
     my @range     = $curbuf->Get( $line1 .. $line2 );
     my $range_end = $#range;
     if ( $expr =~ s/^s([^\[\]\{\}\(\)\<\>\s\w])// ) {
@@ -93,7 +106,7 @@ fun! s:perl_subst(line1, line2, expr)
             my $line = $range[$i];
 
             # my $utf8 = is_utf8($line);
-            $line = decode_utf8( $line );
+            $line = $Perlsubst_encoder->decode( $line );
             my $count = 0;
             my $changed = $line =~ s%$search%
                 my $replacement = eval $replace;
@@ -114,7 +127,7 @@ fun! s:perl_subst(line1, line2, expr)
                     my $msg
                       = qq{Replace "$show_match" with "$replacement" on line $l? (y/n/a/l/q) };
                     $msg =~ s/'/''/g;
-                    my $res = VIM::Eval( encode_utf8( qq{input('$msg')} ) );
+                    my $res = VIM::Eval( $Perlsubst_encoder->encode( qq{input('$msg')} ) );
                     if ( 'a' eq $res ) {
                         $all = 1;
                         $replacement;
@@ -137,13 +150,13 @@ fun! s:perl_subst(line1, line2, expr)
             %egp;
             last RANGE if $quit;
             next RANGE unless $changed;
-            $line = encode_utf8( $line );
+            $line = $Perlsubst_encoder->encode( $line );
             $curbuf->Set( $l, $line );
             last RANGE if $last;
         }
     }
     else {
-        VIM::Msg( encode_utf8("Invalid Persubst expression: $expr"), 'ErrorMsg' );
+        VIM::Msg( $Perlsubst_encoder->encode("Invalid Persubst expression: $expr"), 'ErrorMsg' );
     }
 .
 endfun
