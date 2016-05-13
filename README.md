@@ -2,6 +2,11 @@
 last-change: 2016 May 13
 ...
 
+<!--
+NOTE TO CONTRIBUTORS
+
+Please note that any text in README.md with Markdown `**strong-emphasis**` will become a vimdoc `*tag-target*` and any text with Markdown `*ordinary-emphasis*` will become a vimdoc `|hot-link|`!
+-->
 
 # perlsubst.vim **perlsubst**
 
