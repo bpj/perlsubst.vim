@@ -17,7 +17,7 @@ This is useful if you want to do a substitution using Perl regular expressions, 
 Substituting with perl offers a number of features not found in native Vim:
 
 *   A [regex engine][] which can do some things Vim's can't (and can't do some things Vim's can).
-*   You can search for characters having specific [Unicode properties][] using the `\p{FEATURE}` syntax.
+*   You can search for characters having specific [Unicode properties][] using the `\p{PROPERTY}` syntax.
 *   You can search/replace characters by their [Unicode names][], using the `\N{CHARNAME}` syntax.
 *   You can search/replace combining characters independently of their base characters.
 *   You can use named captures and recurse into them too.

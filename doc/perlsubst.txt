@@ -13,7 +13,7 @@ Vim:
 -       A regex engine[1] which can do some things Vim's can't (and
         can't do some things Vim's can).
 -       You can search for characters having specific Unicode
-        properties[2] using the \p{FEATURE} syntax.
+        properties[2] using the \p{PROPERTY} syntax.
 -       You can search/replace characters by their Unicode names[3],
         using the \N{CHARNAME} syntax.
 -       You can search/replace combining characters independently of
