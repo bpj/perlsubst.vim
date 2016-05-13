@@ -10,8 +10,8 @@ expressions, and be able to interactively confirm each substitution.
 Substituting with perl offers a number of features not found in native
 Vim:
 
--       A regex engine[1] which can do some thing Vim's can't (and can't
-        do some things Vim's can).
+-       A regex engine[1] which can do some things Vim's can't (and
+        can't do some things Vim's can).
 -       You can search for characters having specific Unicode
         properties[2] using the \p{FEATURE} syntax.
 -       You can search/replace characters by their Unicode names[3],
