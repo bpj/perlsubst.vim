@@ -3,7 +3,7 @@ last-change: 2016 May 13
 ...
 
 
-# **:Perlsubst**
+# perlsubst.vim **perlsubst**
 
 Do a perl substitution over a range, emulating Vim's `/c` flag.
 
@@ -23,7 +23,7 @@ If you don't need the interactive confirmation _:perldo_ will do the same things
 [Unicode properties]:   <http://perldoc.perl.org/perluniprops.html>
 [Unicode names]:        <http://perldoc.perl.org/charnames.html>
 
-# USAGE		**perlsubst-usage** 
+# USAGE		**perlsubst-usage** **:Perlsubst**
 
 ````
 :[range]Perlsubst s/{perl-regex}/{perl-qq-string}/[flags]
