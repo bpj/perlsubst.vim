@@ -1,7 +1,7 @@
 " Name: perlsubst.vim
 " Description: Do a perl substitution over a range, emulating Vim's /c flag.
 "   This is mainly useful if you want to use perl's Unicode features.
-" Version: 0.006 2016-05-12
+" Version: 0.007 2016-05-17
 " Author: Benct Philip Jonsson <bpjonsson@gmail.com>
 " License: MIT Licence
 "
@@ -38,8 +38,9 @@ fun! s:perl_subst(line1, line2, expr)
         my ( $search, $replace, $mods )
           = $expr =~ /((?>(?:[^\Q$del\E]|\\\Q$del\E)+))/g;
         my $global = $mods =~ s/g//;
+        my $eval = $mods =~ s/e// && $Perlsubst_allow_replacement_eval;
         $search = eval "qr$del(?$mods:$search)$del";
-        $replace = "qq$del$replace$del";
+        $replace = "qq$del$replace$del" unless $eval;
         my $ctx = $Perlsubst_context;
         $ctx = 10 unless defined $ctx;
         my ( $changed, $all, $quit, $last );

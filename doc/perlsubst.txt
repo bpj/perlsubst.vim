@@ -1,4 +1,4 @@
-perlsubst.txt	For Vim version 7.4	Last change: 2016 May 13
+perlsubst.txt	For Vim version 7.4	Last change: 2016 May 17
 
 perlsubst.vim *perlsubst*
 
@@ -25,19 +25,19 @@ same things much faster.
 
 USAGE *perlsubst-usage* *:Perlsubst*
 
-        :[range]Perlsubst s/{perl-regex}/{perl-qq-string}/[flags]
+        :[range]Perlsubst s/{perl-regex}/{replacement}/[flags]
 
 The default range is the current line, just as with Vim's |:s|.
 
 Instead of / you can use any (perl) non-\w, non-\s character as
 delimiter except ( ) < > { } [ ]. The delimiter can and must be
-backslash-escaped inside both {perl-regex} and {perl-qq-string}.
+backslash-escaped inside both {perl-regex} and {replacement}.
 
 WARNING *perlsubst-warning* *perlsubst-perl-eval*
 
-{perl-qq-string} is repeatedly eval'ed by perl as
+The {replacement} is repeatedly eval'ed by perl as
 
-        eval "qq/$string/";
+        eval "qq/$replacement/";
 
 using the same delimiter as you used in the s/// expression. If that is
 a concern don't use this script!
@@ -51,14 +51,26 @@ again using the same delimiter as in your original s/// expression. The
 eval is so that things like \N{CHARNAME} and \x{CODEPOINT} get resolved
 correctly. Again if the perl eval is a concern don't use this script!
 
+DOUBLE WARNING - PERL CODE AS REPLACEMENT *perlsubst-double-warning*
+*perlsubst-replacement-code*
+
+As of version 0.007 the script understands the (perl) /e flag to the
+substitution expression. If the perl global variable
+$main::Perlsubst_allow_replacement_eval has been set to a true value and
+there is an /e flag, the {replacement} will be eval'ed as Perl code
+rather than as a quoted string. This feature can really wreak havoc, so
+don't use it unless you fully understand what it means! I added it
+because I needed to make a replacement conditional on whether some
+capture group had matched, which isn't possible otherwise.
+
 INTERPOLATION *perlsubst-interpolation*
 
-Since {perl-qq-string} is eval'ed by perl you can interpolate perl's
-regex related global variables like $1 $+ %+ %-, named and numeric
-character references like \N{CHARNAME} and \x{CODEPOINT}, and string
-modifiers like \u \l \U \L \Q \E inside it. The same is true of
-{perl-regex} although interpolating regex variables inside it isn't
-guaranteed to work.
+Since {replacement} is eval'ed by perl you can interpolate perl's regex
+related global variables like $1 $+ %+ %-, named and numeric character
+references like \N{CHARNAME} and \x{CODEPOINT}, and string modifiers
+like \u \l \U \L \Q \E inside it. The same is true of {perl-regex}
+although interpolating regex variables inside it isn't guaranteed to
+work.
 
 FLAGS *perlsubst-flags*
 
