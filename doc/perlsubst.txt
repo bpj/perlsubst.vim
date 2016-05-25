@@ -1,4 +1,4 @@
-perlsubst.txt	For Vim version 7.4	Last change: 2016 May 17
+perlsubst.txt	For Vim version 7.4	Last change: 2016 May 25
 
 perlsubst.vim *perlsubst*
 

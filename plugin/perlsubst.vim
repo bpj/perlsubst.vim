@@ -6,6 +6,22 @@
 " License: MIT Licence
 "
 " Usage: See https://github.com/bpj/perlsubst.vim
+"
+" Changes:
+"
+"   Date:   Wed May 25 14:00:53 2016 +0200
+"       allow empty string as regex/replacement; fixes #1
+"   Date:   Tue May 17 16:20:02 2016 +0200
+"       added code-as-replacement feature
+"   Date:   Thu May 12 16:21:56 2016 +0200
+"       eval the search pattern so that charnames work
+"   Date:   Thu May 12 16:03:26 2016 +0200
+"       use charnames
+"   Date:   Thu May 12 14:03:29 2016 +0200
+"       made encoding dynamic, now uses 'encoding'
+"   Date:   Wed May 25 14:24:19 2016 +0200
+"       backslash escape handling in extraction pattern was broken 
+"       (what was I thinking of!)
 
 if exists('g:loaded_perlsubst')
   finish
@@ -36,7 +52,7 @@ fun! s:perl_subst(line1, line2, expr)
     if ( $expr =~ s/^s(?=([^\[\]\{\}\(\)\<\>\s\w]))// ) {
         my $del = $1;
         my ( $search, $replace, $mods )
-          = $expr =~ /(?>\Q$del\E((?:[^\Q$del\E]|\\\Q$del\E)*))/g;
+          = $expr =~ /(?>\Q$del\E((?:[^\Q$del\E\\]|\\.)*))/g;
         my $global = $mods =~ s/g//;
         my $eval = $mods =~ s/e// && $Perlsubst_allow_replacement_eval;
         $search = eval "qr$del(?$mods:$search)$del";
