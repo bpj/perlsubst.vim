@@ -33,10 +33,10 @@ fun! s:perl_subst(line1, line2, expr)
     $expr = $Perlsubst_encoder->decode( $expr );
     my @range     = $curbuf->Get( $line1 .. $line2 );
     my $range_end = $#range;
-    if ( $expr =~ s/^s([^\[\]\{\}\(\)\<\>\s\w])// ) {
+    if ( $expr =~ s/^s(?=([^\[\]\{\}\(\)\<\>\s\w]))// ) {
         my $del = $1;
         my ( $search, $replace, $mods )
-          = $expr =~ /((?>(?:[^\Q$del\E]|\\\Q$del\E)+))/g;
+          = $expr =~ /(?>\Q$del\E((?:[^\Q$del\E]|\\\Q$del\E)*))/g;
         my $global = $mods =~ s/g//;
         my $eval = $mods =~ s/e// && $Perlsubst_allow_replacement_eval;
         $search = eval "qr$del(?$mods:$search)$del";
